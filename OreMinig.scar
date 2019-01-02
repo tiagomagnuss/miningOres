@@ -1,0 +1,98 @@
+const CollectTime = 3800; invCheio = 4103131;
+const openInv = 3900366;
+var x, y, w, h, maxKobalt, maxTin, totalClicks, i: Integer;
+var cheio: Boolean;
+var lindo: TSCARClient;
+
+var
+  ArrTin: array of Integer; 
+  ArrKobalt: array of Integer;
+
+function abreInv(): Boolean;
+begin
+  FindColor( x, y, openInv, 0, 0, w, h );  
+  MoveMouse( x, y );
+  MouseBtnDown(x, y, mbLeft);        
+  MouseBtnUp(x, y, mbLeft);
+  Result := True;   
+end;
+   
+function TargetResource1( i: Integer ): Boolean;
+begin
+      // se encontrar a cor de index i
+      //Result := FindColor(x, y, ArrTin[i], 0, 0, 800, 600);
+       
+     if FindColor( x, y, i, 0, 0, w, h ) then
+     begin        
+        Result := True; 
+     end else begin  
+        Result := False;
+     end;                         
+end;
+
+procedure Collect;
+begin
+    // se achar além da pos 0,0
+    if (x > 0) and (y > 0 ) then
+    begin     
+        WriteLn( ArrKobalt[i] ); 
+        //WriteLn(x);
+        //WriteLn(y);
+        // move o mouse e espera tempo aleatório
+        MoveMouse(x, y);  
+        MouseBtnDown(x, y, mbLeft);        
+        MouseBtnUp(x, y, mbLeft);   
+        // espera o tempo de coleta pra procurar o próximo
+        Wait(CollectTime);
+    end;
+end;
+    
+begin
+  ArrKobalt := [ 7163944, 5525047, 7820333, 7361064, 4933150, 5192984, 4995353, 6774842, 5590050, 5915157, 5394732, 7035701, 4664848, 5388822, 6444593, 5983784, 5585683, 7888171, 6769439, 5717780, 6506781, 6176543, 4998431, 5455123, 5855022, 7229208, 4665881, 8277020, 4933150, 7097112, 4337685 ];
+  ArrTin := [ 5718043, 7425816, 5914900, 1798746, 1469791, 1665121, 1075031, 2125407, 2916467, 2716781, 3181690, 1865060, 1603169, 2460551, 3906446, 2783343, 3445399, 4032120, 3112822, 1467223, 3636078, 1725773, 1268561, 1797736, 1865073, 2120790, 2583396, 1533006  ]; 
+  maxKobalt := 29;
+  maxTin := 27;
+  w := 1366;
+  h := 727;
+  i := 0;    
+  totalClicks := 0;    
+  lindo := GetClient();
+    
+  repeat  
+    // se passou do index de cores, reseta
+    if i > maxKobalt then
+    begin
+        i := 0;      
+    end;
+    
+    if ( TargetResource1( ArrKobalt[ i ] ) ) then
+    begin
+      lindo.Activate();   
+      WriteLn(ArrKobalt[i]);
+      Collect;
+      totalClicks := totalClicks + 1;
+
+      // abre o inventário e verifica se tá cheio      
+      //abreInv();
+      //Wait(50);
+      //cheio := FindColor( x, y, invCheio, 0, 0, w, h );
+
+      //if cheio then
+      //begin
+      //  WriteLn('cheio');       
+      //end else begin
+      //  WriteLn('not cheio');  
+      //end;
+              
+      WriteLn(totalClicks); 
+    // se não encontrou nenhum, espera um tempo   
+    //end else begin
+    //  Wait(Random(300));
+    end;;    
+    
+    i := i + 1;
+  until False;
+      
+  WriteLn(totalClicks);
+  WriteLn('end');
+end.
