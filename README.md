@@ -1,2 +1,2 @@
 # miningOres
-Script to mine Ores
+Script to mine ores in Dofus.
